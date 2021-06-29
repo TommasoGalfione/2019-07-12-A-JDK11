@@ -4,9 +4,13 @@
 
 package it.polito.tdp.food;
 
+
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.food.model.Food;
+import it.polito.tdp.food.model.FoodCalories;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +45,7 @@ public class FoodController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxFood"
-    private ComboBox<?> boxFood; // Value injected by FXMLLoader
+    private ComboBox<Food> boxFood; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -50,12 +54,58 @@ public class FoodController {
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Creazione grafo...");
+    	Integer porzioni=Integer.parseInt(this.txtPorzioni.getText());
+    	
+    	model.creaGrafo(porzioni);
+    	this.txtResult.appendText(model.geDimensioniGrafo());
+    	this.boxFood.getItems().addAll(model.getIdMap().values());
+    	
+    	//metodo prof
+//    	String porzioniStr = txtPorzioni.getText();
+//		try {
+//			int portions = Integer.parseInt(porzioniStr);
+//			List<Food> cibi = model.getFoods(portions);
+//			boxFood.getItems().clear();
+//			boxFood.getItems().addAll(cibi) ;
+//			
+//		} catch (NumberFormatException ex) {
+//			txtResult.appendText("ERRORE: Devi inserire un numero\n");
+//			return;
+//		}
     }
     
     @FXML
     void doCalorie(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Analisi calorie...");
+    	Food food=this.boxFood.getValue();
+    	int i=0;
+    	for(Food f:model.doCalorie(food).keySet()) {
+    		i++;
+    		txtResult.appendText("\nIl cibo "+f+" con "+model.doCalorie(food).get(f)+" calorie aggiunte");
+    		if(i>4) {
+    			break;
+    		}
+    	}
+    	
+    	
+    	//metodo prof
+//    	Food f = boxFood.getValue() ;
+//		
+//		if(f==null) {
+//			txtResult.appendText("ERRORE: devi selezionare un cibo\n");
+//			return ;
+//		}
+//		
+//		List<FoodCalories> lista = model.elencoCibiConnessi(f);
+//		
+//		for(int i=0; i<5 && i<lista.size(); i++) {
+//			txtResult.appendText(String.format("%s %f\n",
+//					lista.get(i).getFood().getDisplay_name(),
+//					lista.get(i).getCalories()));
+//		}
+//    	
+    	
     }
 
     @FXML
